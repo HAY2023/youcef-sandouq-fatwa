@@ -1,6 +1,6 @@
 {
   "productName": "صندوق فتوى",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "identifier": "app.sandouq-fatwa",
   "build": {
     "frontendDist": "../dist",
@@ -9,7 +9,6 @@
     "beforeBuildCommand": "npm run build"
   },
   "app": {
-    "title": "صندوق فتوى",
     "windows": [
       {
         "title": "صندوق فتوى - مسجد الإيمان",
