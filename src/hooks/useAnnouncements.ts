@@ -18,16 +18,17 @@ export function useAnnouncements() {
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data as Announcement[];
     },
+    refetchInterval: 5000,
   });
 }
 
 export function useAddAnnouncement() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (params: { password: string; message: string; type?: string }) => {
       const { data, error } = await supabase.rpc('add_announcement_authenticated', {
@@ -35,7 +36,7 @@ export function useAddAnnouncement() {
         p_message: params.message,
         p_type: params.type || 'info',
       });
-      
+
       if (error) throw error;
       return data as string | null;
     },
@@ -47,14 +48,14 @@ export function useAddAnnouncement() {
 
 export function useDeleteAnnouncement() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (params: { password: string; announcementId: string }) => {
       const { data, error } = await supabase.rpc('delete_announcement_authenticated', {
         p_password: params.password,
         p_announcement_id: params.announcementId,
       });
-      
+
       if (error) throw error;
       return data as boolean;
     },

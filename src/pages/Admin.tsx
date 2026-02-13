@@ -24,8 +24,8 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableVideoItem } from '@/components/SortableVideoItem';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { 
-  Lock, MessageSquare, Calendar, Video, 
+import {
+  Lock, MessageSquare, Calendar, Video,
   FileSpreadsheet, FileText, Bell, BellOff, Trash2, Settings, List, Home, AlertTriangle, CheckSquare, Plus, Megaphone, Zap, Hash,
   Shield, MapPin, Monitor, Globe, CheckCircle, XCircle, Clock, Wifi, Smartphone, Fingerprint, ChevronDown, ChevronUp, Search, Filter, BarChart3, BellRing, Send, Bug, AlertCircle, RefreshCw, Timer, Sparkles
 } from 'lucide-react';
@@ -82,18 +82,18 @@ const AdminPage = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
-  
+
   // فلاتر السجل
   const [logSearchIP, setLogSearchIP] = useState('');
   const [logFilterStatus, setLogFilterStatus] = useState<'all' | 'authorized' | 'failed'>('all');
   const [logFilterDate, setLogFilterDate] = useState('');
-  
+
   // فلتر الأسئلة
   const [questionFilter, setQuestionFilter] = useState<'all' | 'new' | 'old'>('all');
   const [questionCategoryFilter, setQuestionCategoryFilter] = useState<string>('all');
-  
+
   const { toast } = useToast();
-  
+
   const { data: settings, isLoading: settingsLoading } = useSettings();
   const { data: videos, isLoading: videosLoading } = useVideos();
   const { data: announcements } = useAnnouncements();
@@ -123,14 +123,14 @@ const AdminPage = () => {
   const [showInstallPage, setShowInstallPage] = useState(true);
   const [savingVideo, setSavingVideo] = useState(false);
   const [savingCountdownStyle, setSavingCountdownStyle] = useState(false);
-  
+
   // Countdown color customization
   const [countdownBgColor, setCountdownBgColor] = useState('#000000');
   const [countdownTextColor, setCountdownTextColor] = useState('#22c55e');
   const [countdownBorderColor, setCountdownBorderColor] = useState('#166534');
   const [savingCountdownColors, setSavingCountdownColors] = useState(false);
   const [localVideos, setLocalVideos] = useState<VideoType[]>([]);
-  
+
   // Announcement states
   const [announcementMessage, setAnnouncementMessage] = useState('');
   const [announcementType, setAnnouncementType] = useState('info');
@@ -144,12 +144,12 @@ const AdminPage = () => {
   const [flashEndDate, setFlashEndDate] = useState('');
   const [flashFontSize, setFlashFontSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
   const [savingFlash, setSavingFlash] = useState(false);
-  
+
   // Notification settings states
   const [notifyOnQuestion, setNotifyOnQuestion] = useState(true);
   const [notifyEveryN, setNotifyEveryN] = useState(10);
   const [savingNotification, setSavingNotification] = useState(false);
-  
+
   // Push notification states
   const [notifTitle, setNotifTitle] = useState('');
   const [notifBody, setNotifBody] = useState('');
@@ -161,7 +161,7 @@ const AdminPage = () => {
     sent_at: string;
     recipients_count: number;
   }>>([]);
-  
+
   // Admin device management states
   const [adminDeviceToken, setAdminDeviceToken] = useState('');
   const [settingAdminDevice, setSettingAdminDevice] = useState(false);
@@ -172,10 +172,10 @@ const AdminPage = () => {
     is_admin: boolean | null;
     created_at: string | null;
   }>>([]);
-  
+
   // Content filter state
   const [contentFilterEnabled, setContentFilterEnabled] = useState(true);
-  
+
   // User reports state
   const [userReports, setUserReports] = useState<Array<{
     id: string;
@@ -202,9 +202,9 @@ const AdminPage = () => {
       const cat = getCategoryLabel(q.category);
       categoryCount[cat] = (categoryCount[cat] || 0) + 1;
     });
-    
+
     const categoryData = Object.entries(categoryCount).map(([name, value]) => ({ name, value }));
-    
+
     // إحصائيات حسب التاريخ (آخر 7 أيام)
     const last7Days: Record<string, number> = {};
     const today = new Date();
@@ -214,7 +214,7 @@ const AdminPage = () => {
       const dateStr = date.toLocaleDateString('ar-SA', { weekday: 'short', day: 'numeric' });
       last7Days[dateStr] = 0;
     }
-    
+
     questions.forEach(q => {
       const qDate = new Date(q.created_at);
       const daysDiff = Math.floor((today.getTime() - qDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -225,9 +225,9 @@ const AdminPage = () => {
         }
       }
     });
-    
+
     const dailyData = Object.entries(last7Days).map(([name, count]) => ({ name, count }));
-    
+
     return { categoryData, dailyData };
   }, [questions]);
 
@@ -241,7 +241,7 @@ const AdminPage = () => {
       const dateStr = date.toLocaleDateString('ar-SA', { weekday: 'short', day: 'numeric' });
       last7Days[dateStr] = 0;
     }
-    
+
     accessLogs.forEach(log => {
       const logDate = new Date(log.accessed_at);
       const daysDiff = Math.floor((today.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -252,14 +252,14 @@ const AdminPage = () => {
         }
       }
     });
-    
+
     return Object.entries(last7Days).map(([name, count]) => ({ name, count }));
   }, [accessLogs]);
 
   // فلترة الأسئلة حسب التصنيف والتاريخ (قديم أولاً ثم جديد)
   const filteredQuestions = useMemo(() => {
     let filtered = [...questions];
-    
+
     // فلتر حسب الوقت (قديم/جديد)
     if (questionFilter === 'new') {
       // الأسئلة في آخر 24 ساعة
@@ -270,15 +270,15 @@ const AdminPage = () => {
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
       filtered = filtered.filter(q => new Date(q.created_at) <= oneDayAgo);
     }
-    
+
     // فلتر حسب نوع الفتوى
     if (questionCategoryFilter !== 'all') {
       filtered = filtered.filter(q => q.category === questionCategoryFilter);
     }
-    
+
     // ترتيب قديم أولاً ثم جديد
     filtered.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    
+
     return filtered;
   }, [questions, questionFilter, questionCategoryFilter]);
 
@@ -289,17 +289,17 @@ const AdminPage = () => {
       if (logSearchIP && !log.ip_address?.toLowerCase().includes(logSearchIP.toLowerCase())) {
         return false;
       }
-      
+
       // فلتر الحالة
       if (logFilterStatus === 'authorized' && !log.is_authorized) return false;
       if (logFilterStatus === 'failed' && log.is_authorized) return false;
-      
+
       // فلتر التاريخ
       if (logFilterDate) {
         const logDate = new Date(log.accessed_at).toISOString().split('T')[0];
         if (logDate !== logFilterDate) return false;
       }
-      
+
       return true;
     });
   }, [accessLogs, logSearchIP, logFilterStatus, logFilterDate]);
@@ -311,15 +311,15 @@ const AdminPage = () => {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
-      
+
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      
+
       oscillator.frequency.value = 800;
       oscillator.type = 'sine';
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-      
+
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.3);
     } catch {
@@ -413,7 +413,7 @@ const AdminPage = () => {
         p_status: newStatus
       });
       if (!error && data) {
-        setUserReports(prev => prev.map(r => 
+        setUserReports(prev => prev.map(r =>
           r.id === reportId ? { ...r, status: newStatus } : r
         ));
         toast({ title: 'تم التحديث', description: `تم تحديث حالة البلاغ إلى "${newStatus === 'reviewed' ? 'تمت المراجعة' : newStatus === 'resolved' ? 'تم الحل' : 'معلق'}"` });
@@ -471,17 +471,17 @@ const AdminPage = () => {
             playNotificationSound();
           }
           loadQuestions();
-          
+
           // إرسال إشعار المتصفح
           if ('Notification' in window && Notification.permission === 'granted') {
             const question = payload.new as { category?: string; question_text?: string };
             new Notification('📩 سؤال جديد!', {
               body: `فئة: ${getCategoryLabel(question.category || 'other')}\n${question.question_text?.slice(0, 50) || ''}...`,
-              icon: '/favicon.jpg',
+              icon: '/icon-mosque.png',
               tag: 'new-question',
             });
           }
-          
+
           toast({ title: '📩 سؤال جديد', description: 'تم استلام سؤال جديد' });
         }
       )
@@ -509,7 +509,7 @@ const AdminPage = () => {
     try {
       const isValid = await verifyPassword.mutateAsync(password);
       logAdminAccess(isValid, true);
-      
+
       if (isValid) {
         setIsAuthenticated(true);
         setStoredPassword(password);
@@ -642,14 +642,14 @@ const AdminPage = () => {
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     if (over && active.id !== over.id) {
       const oldIndex = localVideos.findIndex(v => v.id === active.id);
       const newIndex = localVideos.findIndex(v => v.id === over.id);
-      
+
       const newVideos = arrayMove(localVideos, oldIndex, newIndex);
       setLocalVideos(newVideos);
-      
+
       try {
         await reorderVideos.mutateAsync({
           password: storedPassword,
@@ -860,10 +860,10 @@ const AdminPage = () => {
       setNotifTitle('');
       setNotifBody('');
       await loadNotificationHistory();
-      
-      toast({ 
-        title: '✓ تم الإرسال', 
-        description: `تم إرسال الإشعار إلى ${data?.tokens_count || 0} جهاز` 
+
+      toast({
+        title: '✓ تم الإرسال',
+        description: `تم إرسال الإشعار إلى ${data?.tokens_count || 0} جهاز`
       });
     } catch (error) {
       console.error('Error sending notification:', error);
@@ -880,7 +880,7 @@ const AdminPage = () => {
         .from('push_tokens')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       setPushTokensList(data || []);
     } catch (error) {
@@ -905,9 +905,9 @@ const AdminPage = () => {
 
       setAdminDeviceToken('');
       await loadPushTokens();
-      toast({ 
-        title: '✓ تم التعيين', 
-        description: 'تم تعيين الجهاز كمسؤول بنجاح' 
+      toast({
+        title: '✓ تم التعيين',
+        description: 'تم تعيين الجهاز كمسؤول بنجاح'
       });
     } catch (error) {
       console.error('Error setting admin device:', error);
@@ -924,9 +924,9 @@ const AdminPage = () => {
         p_password: storedPassword,
         p_notification_id: notificationId
       });
-      
+
       if (error) throw error;
-      
+
       setNotificationHistory(prev => prev.filter(n => n.id !== notificationId));
       toast({ title: '✓ تم الحذف', description: 'تم حذف الإشعار بنجاح' });
     } catch (error) {
@@ -973,8 +973,8 @@ const AdminPage = () => {
   };
 
   const toggleQuestionSelection = (questionId: string) => {
-    setSelectedQuestions(prev => 
-      prev.includes(questionId) 
+    setSelectedQuestions(prev =>
+      prev.includes(questionId)
         ? prev.filter(id => id !== questionId)
         : [...prev, questionId]
     );
@@ -1002,12 +1002,12 @@ const AdminPage = () => {
               <Shield className="w-10 h-10 text-primary-foreground" />
             </div>
           </div>
-          
+
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold mb-2">لوحة التحكم</h2>
             <p className="text-sm text-muted-foreground">أدخل كلمة المرور للوصول إلى لوحة الإدارة</p>
           </div>
-          
+
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium">كلمة المرور</label>
@@ -1022,9 +1022,9 @@ const AdminPage = () => {
                 />
               </div>
             </div>
-            <Button 
-              type="submit" 
-              className="w-full h-12 text-lg font-medium rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all" 
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg font-medium rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -1040,11 +1040,11 @@ const AdminPage = () => {
               )}
             </Button>
           </form>
-          
+
           <div className="mt-8 pt-6 border-t border-border/50 flex justify-center">
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => navigate('/')}
               className="text-muted-foreground hover:text-foreground"
             >
@@ -1146,7 +1146,7 @@ const AdminPage = () => {
               <BarChart3 className="w-5 h-5 text-primary" />
               إحصائيات الأسئلة
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* الأسئلة حسب الفئة */}
               <div className="bg-card border border-border rounded-lg p-4">
@@ -1254,8 +1254,8 @@ const AdminPage = () => {
           <TabsContent value="questions" className="space-y-4">
             <div className="flex flex-wrap gap-2 justify-between items-center">
               <div className="flex gap-2 flex-wrap">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={() => exportToExcel(questions)}
                   disabled={questions.length === 0}
@@ -1263,8 +1263,8 @@ const AdminPage = () => {
                   <FileSpreadsheet className="w-4 h-4 ml-2" />
                   Excel
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={() => exportToPDF(questions)}
                   disabled={questions.length === 0}
@@ -1283,13 +1283,13 @@ const AdminPage = () => {
                   </Button>
                 )}
               </div>
-              
+
               <div className="flex gap-2">
                 {selectedQuestions.length > 0 && (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button 
-                        variant="destructive" 
+                      <Button
+                        variant="destructive"
                         size="sm"
                       >
                         <Trash2 className="w-4 h-4 ml-2" />
@@ -1317,8 +1317,8 @@ const AdminPage = () => {
                 )}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button 
-                      variant="destructive" 
+                    <Button
+                      variant="destructive"
                       size="sm"
                       disabled={questions.length === 0}
                     >
@@ -1389,9 +1389,9 @@ const AdminPage = () => {
                   <span className="text-sm text-muted-foreground">
                     عرض {filteredQuestions.length} من {questions.length} سؤال
                   </span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => {
                       setQuestionFilter('all');
                       setQuestionCategoryFilter('all');
@@ -1411,11 +1411,10 @@ const AdminPage = () => {
                 </div>
               ) : (
                 filteredQuestions.map((q, index) => (
-                  <div 
-                    key={q.id} 
-                    className={`bg-card border rounded-lg p-4 cursor-pointer transition-colors ${
-                      selectedQuestions.includes(q.id) ? 'border-primary bg-primary/5' : 'border-border'
-                    }`}
+                  <div
+                    key={q.id}
+                    className={`bg-card border rounded-lg p-4 cursor-pointer transition-colors ${selectedQuestions.includes(q.id) ? 'border-primary bg-primary/5' : 'border-border'
+                      }`}
                     onClick={() => toggleQuestionSelection(q.id)}
                   >
                     <div className="flex items-start gap-3">
@@ -1467,18 +1466,16 @@ const AdminPage = () => {
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className={`px-2 py-0.5 text-xs rounded-full ${
-                            report.report_type === 'bug' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-                            report.report_type === 'suggestion' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                            'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                          }`}>
+                          <span className={`px-2 py-0.5 text-xs rounded-full ${report.report_type === 'bug' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                              report.report_type === 'suggestion' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                            }`}>
                             {report.report_type === 'bug' ? 'مشكلة تقنية' : report.report_type === 'suggestion' ? 'اقتراح' : 'أخرى'}
                           </span>
-                          <span className={`px-2 py-0.5 text-xs rounded-full ${
-                            report.status === 'pending' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
-                            report.status === 'reviewed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                            'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                          }`}>
+                          <span className={`px-2 py-0.5 text-xs rounded-full ${report.status === 'pending' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
+                              report.status === 'reviewed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                            }`}>
                             {report.status === 'pending' ? 'معلق' : report.status === 'reviewed' ? 'تمت المراجعة' : 'تم الحل'}
                           </span>
                           <span className="text-xs text-muted-foreground">
@@ -1541,9 +1538,9 @@ const AdminPage = () => {
                 سجل محاولات الدخول ({filteredLogs.length})
               </h3>
               <div className="flex items-center gap-2">
-                <Button 
-                  variant="default" 
-                  size="sm" 
+                <Button
+                  variant="default"
+                  size="sm"
                   onClick={() => navigate('/security-logs')}
                   className="bg-amber-600 hover:bg-amber-700"
                 >
@@ -1600,9 +1597,9 @@ const AdminPage = () => {
                 </div>
               </div>
               {(logSearchIP || logFilterStatus !== 'all' || logFilterDate) && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => {
                     setLogSearchIP('');
                     setLogFilterStatus('all');
@@ -1622,14 +1619,13 @@ const AdminPage = () => {
                 </div>
               ) : (
                 filteredLogs.map((log) => (
-                  <div 
-                    key={log.id} 
-                    className={`bg-card border rounded-lg overflow-hidden ${
-                      log.is_authorized ? 'border-green-500/30' : 'border-destructive/30'
-                    }`}
+                  <div
+                    key={log.id}
+                    className={`bg-card border rounded-lg overflow-hidden ${log.is_authorized ? 'border-green-500/30' : 'border-destructive/30'
+                      }`}
                   >
                     {/* Header */}
-                    <div 
+                    <div
                       className="p-4 cursor-pointer hover:bg-muted/50 transition-colors"
                       onClick={() => toggleLogExpand(log.id)}
                     >
@@ -1662,7 +1658,7 @@ const AdminPage = () => {
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                         <div className="flex items-center gap-1 text-muted-foreground">
                           <Globe className="w-4 h-4" />
@@ -1831,7 +1827,7 @@ const AdminPage = () => {
                 placeholder="رابط YouTube أو Google Drive (مثال: https://www.youtube.com/watch?v=... أو https://drive.google.com/file/d/...)"
                 dir="ltr"
               />
-              
+
               {/* معاينة الفيديو */}
               {videoUrl && (
                 <div className="border border-border rounded-lg overflow-hidden">
@@ -1869,9 +1865,9 @@ const AdminPage = () => {
                   </div>
                 </div>
               )}
-              
-              <Button 
-                onClick={handleSaveVideo} 
+
+              <Button
+                onClick={handleSaveVideo}
                 disabled={savingVideo || !videoUrl || !videoTitle}
                 className="w-full"
               >
@@ -1890,18 +1886,17 @@ const AdminPage = () => {
                   <div key={ann.id} className="bg-card border border-border rounded-lg p-4">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1">
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          ann.type === 'success' ? 'bg-green-500/20 text-green-600' :
-                          ann.type === 'warning' ? 'bg-amber-500/20 text-amber-600' :
-                          ann.type === 'error' ? 'bg-destructive/20 text-destructive' :
-                          'bg-primary/20 text-primary'
-                        }`}>
+                        <span className={`text-xs px-2 py-1 rounded ${ann.type === 'success' ? 'bg-green-500/20 text-green-600' :
+                            ann.type === 'warning' ? 'bg-amber-500/20 text-amber-600' :
+                              ann.type === 'error' ? 'bg-destructive/20 text-destructive' :
+                                'bg-primary/20 text-primary'
+                          }`}>
                           {ann.type === 'success' ? 'نجاح' : ann.type === 'warning' ? 'تنبيه' : ann.type === 'error' ? 'خطأ' : 'إعلان'}
                         </span>
                         <p className="mt-2 text-sm">{ann.message}</p>
                       </div>
-                      <Button 
-                        variant="destructive" 
+                      <Button
+                        variant="destructive"
                         size="sm"
                         onClick={() => handleDeleteAnnouncement(ann.id)}
                       >
@@ -1940,8 +1935,8 @@ const AdminPage = () => {
                   <SelectItem value="error">تحذير</SelectItem>
                 </SelectContent>
               </Select>
-              <Button 
-                onClick={handleSaveAnnouncement} 
+              <Button
+                onClick={handleSaveAnnouncement}
                 disabled={savingAnnouncement || !announcementMessage}
                 className="w-full"
               >
@@ -1961,7 +1956,7 @@ const AdminPage = () => {
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <div 
+                          <div
                             className="w-4 h-4 rounded-full border"
                             style={{ backgroundColor: msg.color }}
                           />
@@ -1979,16 +1974,16 @@ const AdminPage = () => {
                             </span>
                           )}
                         </div>
-                        <p 
-                          className="text-sm p-2 rounded" 
+                        <p
+                          className="text-sm p-2 rounded"
                           style={{ backgroundColor: msg.color, color: getContrastColor(msg.color) }}
                           dir={msg.text_direction}
                         >
                           {msg.message}
                         </p>
                       </div>
-                      <Button 
-                        variant="destructive" 
+                      <Button
+                        variant="destructive"
                         size="sm"
                         onClick={() => handleDeleteFlashMessage(msg.id)}
                       >
@@ -2010,14 +2005,14 @@ const AdminPage = () => {
                 <Plus className="w-5 h-5 text-primary" />
                 إضافة رسالة فلاش جديدة
               </h4>
-              
+
               <Input
                 type="text"
                 value={flashMessage}
                 onChange={(e) => setFlashMessage(e.target.value)}
                 placeholder="نص الرسالة"
               />
-              
+
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm mb-2">اتجاه النص</label>
@@ -2031,7 +2026,7 @@ const AdminPage = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm mb-2">حجم الخط</label>
                   <Select value={flashFontSize} onValueChange={(v) => setFlashFontSize(v as 'sm' | 'md' | 'lg' | 'xl')}>
@@ -2046,7 +2041,7 @@ const AdminPage = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm mb-2">اللون</label>
                   <div className="flex gap-2">
@@ -2077,7 +2072,7 @@ const AdminPage = () => {
                   />
                   <p className="text-xs text-muted-foreground mt-1">اتركه فارغاً للظهور فوراً</p>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm mb-2">تاريخ النهاية (اختياري)</label>
                   <Input
@@ -2092,25 +2087,24 @@ const AdminPage = () => {
               {flashMessage && (
                 <div>
                   <label className="block text-sm mb-2">معاينة:</label>
-                  <div 
+                  <div
                     className="p-3 rounded-lg flex items-center gap-2 overflow-hidden"
                     style={{ backgroundColor: flashColor, color: getContrastColor(flashColor) }}
                     dir={flashDirection}
                   >
                     <Zap className="w-5 h-5 flex-shrink-0" />
                     <div className="animate-marquee whitespace-nowrap">
-                      <p className={`inline-block font-medium ${
-                        flashFontSize === 'sm' ? 'text-sm' :
-                        flashFontSize === 'lg' ? 'text-lg' :
-                        flashFontSize === 'xl' ? 'text-xl' : 'text-base'
-                      }`}>{flashMessage}</p>
+                      <p className={`inline-block font-medium ${flashFontSize === 'sm' ? 'text-sm' :
+                          flashFontSize === 'lg' ? 'text-lg' :
+                            flashFontSize === 'xl' ? 'text-xl' : 'text-base'
+                        }`}>{flashMessage}</p>
                     </div>
                   </div>
                 </div>
               )}
 
-              <Button 
-                onClick={handleSaveFlashMessage} 
+              <Button
+                onClick={handleSaveFlashMessage}
                 disabled={savingFlash || !flashMessage}
                 className="w-full"
               >
@@ -2243,8 +2237,8 @@ const AdminPage = () => {
                             </AlertDialogHeader>
                             <AlertDialogFooter className="flex-row-reverse gap-2">
                               <AlertDialogCancel>إلغاء</AlertDialogCancel>
-                              <AlertDialogAction 
-                                onClick={() => handleDeleteNotification(notif.id)} 
+                              <AlertDialogAction
+                                onClick={() => handleDeleteNotification(notif.id)}
                                 className="bg-destructive hover:bg-destructive/90"
                               >
                                 حذف
@@ -2312,16 +2306,16 @@ const AdminPage = () => {
                     اختر النمط المناسب وشاهد المعاينة قبل الحفظ
                   </p>
                 </div>
-                
-                <RadioGroup 
-                  value={String(countdownStyle)} 
+
+                <RadioGroup
+                  value={String(countdownStyle)}
                   onValueChange={(val) => setCountdownStyle(Number(val))}
                   className="grid grid-cols-2 md:grid-cols-5 gap-3"
                 >
                   <div>
                     <RadioGroupItem value="1" id="style-1" className="peer sr-only" />
-                    <Label 
-                      htmlFor="style-1" 
+                    <Label
+                      htmlFor="style-1"
                       className="flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-3 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary cursor-pointer"
                     >
                       <Monitor className="w-6 h-6 mb-1" />
@@ -2330,8 +2324,8 @@ const AdminPage = () => {
                   </div>
                   <div>
                     <RadioGroupItem value="2" id="style-2" className="peer sr-only" />
-                    <Label 
-                      htmlFor="style-2" 
+                    <Label
+                      htmlFor="style-2"
                       className="flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-3 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary cursor-pointer"
                     >
                       <Clock className="w-6 h-6 mb-1" />
@@ -2340,8 +2334,8 @@ const AdminPage = () => {
                   </div>
                   <div>
                     <RadioGroupItem value="3" id="style-3" className="peer sr-only" />
-                    <Label 
-                      htmlFor="style-3" 
+                    <Label
+                      htmlFor="style-3"
                       className="flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-3 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary cursor-pointer"
                     >
                       <Timer className="w-6 h-6 mb-1" />
@@ -2350,8 +2344,8 @@ const AdminPage = () => {
                   </div>
                   <div>
                     <RadioGroupItem value="4" id="style-4" className="peer sr-only" />
-                    <Label 
-                      htmlFor="style-4" 
+                    <Label
+                      htmlFor="style-4"
                       className="flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-3 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary cursor-pointer"
                     >
                       <RefreshCw className="w-6 h-6 mb-1" />
@@ -2360,8 +2354,8 @@ const AdminPage = () => {
                   </div>
                   <div>
                     <RadioGroupItem value="5" id="style-5" className="peer sr-only" />
-                    <Label 
-                      htmlFor="style-5" 
+                    <Label
+                      htmlFor="style-5"
                       className="flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-3 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary cursor-pointer"
                     >
                       <Sparkles className="w-6 h-6 mb-1" />
@@ -2445,7 +2439,7 @@ const AdminPage = () => {
                 <div className="mt-4">
                   <h4 className="text-sm font-medium text-muted-foreground mb-3">معاينة:</h4>
                   <div className="max-w-xl mx-auto">
-                    <CountdownTimerPreview 
+                    <CountdownTimerPreview
                       style={countdownStyle}
                       bgColor={countdownBgColor}
                       textColor={countdownTextColor}
@@ -2554,16 +2548,16 @@ const AdminPage = () => {
                   <p className="font-medium text-sm">إشعارات المتصفح</p>
                   <p className="text-xs text-muted-foreground">عرض إشعار في المتصفح</p>
                 </div>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={() => {
                     if ('Notification' in window) {
                       Notification.requestPermission().then(permission => {
                         if (permission === 'granted') {
-                          new Notification('تم تفعيل الإشعارات!', { 
+                          new Notification('تم تفعيل الإشعارات!', {
                             body: 'ستصلك إشعارات عند وصول أسئلة جديدة',
-                            icon: '/favicon.jpg' 
+                            icon: '/favicon.jpg'
                           });
                         }
                       });

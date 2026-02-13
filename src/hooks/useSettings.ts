@@ -24,10 +24,11 @@ export function useSettings() {
         .from('settings')
         .select('id, is_box_open, next_session_date, video_url, video_title, show_countdown, show_question_count, show_install_page, countdown_style, countdown_bg_color, countdown_text_color, countdown_border_color')
         .maybeSingle();
-      
+
       if (error) throw error;
       return data as Settings | null;
     },
+    refetchInterval: 5000,
   });
 }
 
@@ -37,7 +38,7 @@ export function useVerifyAdminPassword() {
       const { data, error } = await supabase.rpc('verify_admin_password', {
         input_password: password
       });
-      
+
       if (error) throw error;
       return data as boolean;
     },
@@ -46,7 +47,7 @@ export function useVerifyAdminPassword() {
 
 export function useUpdateSettingsAuthenticated() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (params: {
       password: string;
@@ -76,7 +77,7 @@ export function useUpdateSettingsAuthenticated() {
         p_countdown_text_color: params.countdown_text_color,
         p_countdown_border_color: params.countdown_border_color,
       });
-      
+
       if (error) throw error;
       return data as boolean;
     },
@@ -92,7 +93,7 @@ export function useGetQuestionsCountAuthenticated() {
       const { data, error } = await supabase.rpc('get_questions_count_authenticated', {
         p_password: password
       });
-      
+
       if (error) throw error;
       return data as number;
     },
@@ -131,7 +132,7 @@ export function useUpdateAdminPassword() {
         p_old_password: params.oldPassword,
         p_new_password: params.newPassword,
       });
-      
+
       if (error) throw error;
       return data as boolean;
     },
@@ -147,16 +148,17 @@ export function useNotificationSettings() {
         .from('notification_settings')
         .select('*')
         .maybeSingle();
-      
+
       if (error) throw error;
       return data;
     },
+    refetchInterval: 10000,
   });
 }
 
 export function useUpdateNotificationSettings() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (params: {
       password: string;
@@ -167,11 +169,11 @@ export function useUpdateNotificationSettings() {
       const { data: isValid, error: verifyError } = await supabase.rpc('verify_admin_password', {
         input_password: params.password
       });
-      
+
       if (verifyError || !isValid) {
         throw new Error('Invalid password');
       }
-      
+
       // Update notification settings
       const { error } = await supabase
         .from('notification_settings')
@@ -181,7 +183,7 @@ export function useUpdateNotificationSettings() {
           updated_at: new Date().toISOString()
         })
         .eq('id', (await supabase.from('notification_settings').select('id').single()).data?.id);
-      
+
       if (error) throw error;
       return true;
     },
@@ -194,9 +196,9 @@ export function useUpdateNotificationSettings() {
 // Block user by IP or fingerprint
 export function useBlockUser() {
   return useMutation({
-    mutationFn: async (params: { 
-      password: string; 
-      ip_address?: string; 
+    mutationFn: async (params: {
+      password: string;
+      ip_address?: string;
       fingerprint_id?: string;
       reason?: string;
     }) => {
@@ -206,7 +208,7 @@ export function useBlockUser() {
         p_fingerprint_id: params.fingerprint_id || null,
         p_reason: params.reason || null
       });
-      
+
       if (error) throw error;
       return !!data;
     },
@@ -221,7 +223,7 @@ export function useUnblockUser() {
         p_password: params.password,
         p_blocked_id: params.id
       });
-      
+
       if (error) throw error;
       return !!data;
     },
@@ -235,7 +237,7 @@ export function useGetBlockedUsers() {
       const { data, error } = await supabase.rpc('get_blocked_users_authenticated', {
         p_password: password
       });
-      
+
       if (error) throw error;
       return (data || []) as Array<{
         id: string;
