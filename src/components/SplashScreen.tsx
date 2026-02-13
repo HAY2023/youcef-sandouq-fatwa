@@ -28,40 +28,40 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background overflow-hidden"
         >
           {/* خلفية النمط الإسلامي المتحركة */}
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.05, 1],
               rotate: [0, 1, 0]
             }}
-            transition={{ 
+            transition={{
               duration: 8,
               repeat: Infinity,
               ease: 'easeInOut'
             }}
-            className="absolute inset-0 islamic-pattern opacity-15" 
+            className="absolute inset-0 islamic-pattern opacity-15"
           />
-          
+
           {/* تأثير التوهج الخلفي الكبير */}
           <motion.div
-            animate={{ 
+            animate={{
               scale: [1, 1.5, 1],
               opacity: [0.15, 0.3, 0.15]
             }}
-            transition={{ 
+            transition={{
               duration: 4,
               repeat: Infinity,
               ease: 'easeInOut'
             }}
             className="absolute w-80 h-80 rounded-full bg-primary/30 blur-[100px]"
           />
-          
+
           {/* تأثير توهج ثانوي */}
           <motion.div
-            animate={{ 
+            animate={{
               scale: [1.2, 1, 1.2],
               opacity: [0.1, 0.2, 0.1]
             }}
-            transition={{ 
+            transition={{
               duration: 3,
               repeat: Infinity,
               ease: 'easeInOut',
@@ -69,26 +69,26 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
             }}
             className="absolute w-96 h-96 rounded-full bg-accent/20 blur-[120px]"
           />
-          
+
           {/* حاوية المحتوى الرئيسية */}
           <motion.div
             initial={{ scale: 0.7, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
               type: 'spring',
               stiffness: 150,
               damping: 20,
-              delay: 0.15 
+              delay: 0.15
             }}
             className="relative z-10 flex flex-col items-center gap-10"
           >
             {/* الشعار مع تأثير النبض المحسن */}
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.08, 1, 1.04, 1],
                 filter: ['brightness(1)', 'brightness(1.15)', 'brightness(1)', 'brightness(1.1)', 'brightness(1)']
               }}
-              transition={{ 
+              transition={{
                 duration: 2.5,
                 repeat: Infinity,
                 ease: 'easeInOut'
@@ -97,25 +97,25 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
             >
               {/* حلقة التوهج الخارجية */}
               <motion.div
-                animate={{ 
+                animate={{
                   scale: [1, 1.3, 1],
                   opacity: [0.4, 0.1, 0.4]
                 }}
-                transition={{ 
+                transition={{
                   duration: 2,
                   repeat: Infinity,
                   ease: 'easeInOut'
                 }}
                 className="absolute -inset-4 rounded-[2rem] bg-gradient-to-r from-primary/40 via-accent/30 to-primary/40 blur-2xl"
               />
-              
+
               {/* حلقة التوهج الداخلية */}
               <motion.div
-                animate={{ 
+                animate={{
                   scale: [1.1, 1.25, 1.1],
                   opacity: [0.5, 0.2, 0.5]
                 }}
-                transition={{ 
+                transition={{
                   duration: 1.5,
                   repeat: Infinity,
                   ease: 'easeInOut',
@@ -123,12 +123,12 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
                 }}
                 className="absolute -inset-2 rounded-3xl bg-primary/30 blur-xl"
               />
-              
+
               {/* الشعار */}
               <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-3xl bg-card border-2 border-border shadow-2xl flex items-center justify-center overflow-hidden">
-                <img 
-                  src="/favicon.jpg" 
-                  alt="صندوق فتوى" 
+                <img
+                  src="/favicon.jpg"
+                  alt="صندوق فتوى"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -138,22 +138,22 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ 
-                delay: 0.5, 
+              transition={{
+                delay: 0.5,
                 duration: 0.7,
                 ease: [0.4, 0, 0.2, 1]
               }}
               className="text-center"
             >
-              <motion.h1 
-                animate={{ 
+              <motion.h1
+                animate={{
                   textShadow: [
                     '0 0 20px transparent',
                     '0 0 30px hsl(var(--primary) / 0.3)',
                     '0 0 20px transparent'
                   ]
                 }}
-                transition={{ 
+                transition={{
                   duration: 3,
                   repeat: Infinity,
                   ease: 'easeInOut'
@@ -162,13 +162,21 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
               >
                 صندوق فتوى
               </motion.h1>
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
                 className="text-muted-foreground text-lg md:text-xl"
               >
                 مسجد الإيمان – 150 مسكن
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+                className="text-primary/60 text-sm mt-2 font-mono"
+              >
+                v1.0.17
               </motion.p>
             </motion.div>
           </motion.div>

@@ -492,6 +492,29 @@ const AdminPage = () => {
     };
   }, [isAuthenticated, soundEnabled]);
 
+  const handleTestNotification = () => {
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        new Notification('🔔 إشعار تجريبي', {
+          body: 'هذا إشعار تجريبي من نظام صندوق فتوى للتأكد من الصورة والتنبيهات.',
+          icon: '/icon-mosque.png',
+          tag: 'test-notification',
+        });
+        toast({ title: '✓ تم الإرسال', description: 'تم إرسال إشعار تجريبي للمتصفح' });
+      } else {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            handleTestNotification();
+          } else {
+            toast({ title: '⚠️ تنبيه', description: 'يرجى تفعيل الإشعارات في المتصفح أولاً', variant: 'destructive' });
+          }
+        });
+      }
+    } else {
+      toast({ title: '❌ خطأ', description: 'متصفحك لا يدعم الإشعارات', variant: 'destructive' });
+    }
+  };
+
   const loadQuestions = async () => {
     if (!storedPassword) return;
     try {
@@ -1467,14 +1490,14 @@ const AdminPage = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <span className={`px-2 py-0.5 text-xs rounded-full ${report.report_type === 'bug' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-                              report.report_type === 'suggestion' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                                'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                            report.report_type === 'suggestion' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                              'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                             }`}>
                             {report.report_type === 'bug' ? 'مشكلة تقنية' : report.report_type === 'suggestion' ? 'اقتراح' : 'أخرى'}
                           </span>
                           <span className={`px-2 py-0.5 text-xs rounded-full ${report.status === 'pending' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
-                              report.status === 'reviewed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                                'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                            report.status === 'reviewed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                              'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                             }`}>
                             {report.status === 'pending' ? 'معلق' : report.status === 'reviewed' ? 'تمت المراجعة' : 'تم الحل'}
                           </span>
@@ -1887,9 +1910,9 @@ const AdminPage = () => {
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1">
                         <span className={`text-xs px-2 py-1 rounded ${ann.type === 'success' ? 'bg-green-500/20 text-green-600' :
-                            ann.type === 'warning' ? 'bg-amber-500/20 text-amber-600' :
-                              ann.type === 'error' ? 'bg-destructive/20 text-destructive' :
-                                'bg-primary/20 text-primary'
+                          ann.type === 'warning' ? 'bg-amber-500/20 text-amber-600' :
+                            ann.type === 'error' ? 'bg-destructive/20 text-destructive' :
+                              'bg-primary/20 text-primary'
                           }`}>
                           {ann.type === 'success' ? 'نجاح' : ann.type === 'warning' ? 'تنبيه' : ann.type === 'error' ? 'خطأ' : 'إعلان'}
                         </span>
@@ -2095,8 +2118,8 @@ const AdminPage = () => {
                     <Zap className="w-5 h-5 flex-shrink-0" />
                     <div className="animate-marquee whitespace-nowrap">
                       <p className={`inline-block font-medium ${flashFontSize === 'sm' ? 'text-sm' :
-                          flashFontSize === 'lg' ? 'text-lg' :
-                            flashFontSize === 'xl' ? 'text-xl' : 'text-base'
+                        flashFontSize === 'lg' ? 'text-lg' :
+                          flashFontSize === 'xl' ? 'text-xl' : 'text-base'
                         }`}>{flashMessage}</p>
                     </div>
                   </div>
@@ -2533,39 +2556,59 @@ const AdminPage = () => {
               <p className="text-sm text-muted-foreground">
                 تلقي إشعارات في المتصفح عند وصول أسئلة جديدة أثناء تواجدك في لوحة التحكم
               </p>
-              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                <div>
-                  <p className="font-medium text-sm">إشعارات الصوت</p>
-                  <p className="text-xs text-muted-foreground">تشغيل صوت عند وصول سؤال جديد</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div>
+                    <p className="font-medium text-sm">إشعارات الصوت</p>
+                    <p className="text-xs text-muted-foreground">تشغيل صوت عند وصول سؤال جديد</p>
+                  </div>
+                  <Switch
+                    checked={soundEnabled}
+                    onCheckedChange={setSoundEnabled}
+                  />
                 </div>
-                <Switch
-                  checked={soundEnabled}
-                  onCheckedChange={setSoundEnabled}
-                />
+
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div>
+                    <p className="font-medium text-sm">اختبار الإشعارات</p>
+                    <p className="text-xs text-muted-foreground">تأكد من عمل الأيقونة والتنبيه</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleTestNotification}
+                  >
+                    <Send className="w-4 h-4 ml-2" />
+                    اختبار
+                  </Button>
+                </div>
               </div>
+
               <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div>
                   <p className="font-medium text-sm">إشعارات المتصفح</p>
-                  <p className="text-xs text-muted-foreground">عرض إشعار في المتصفح</p>
+                  <p className="text-xs text-muted-foreground">طلب إذن المتصفح وإرسال تنبيه تفعيل</p>
                 </div>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="default"
                   onClick={() => {
                     if ('Notification' in window) {
                       Notification.requestPermission().then(permission => {
                         if (permission === 'granted') {
                           new Notification('تم تفعيل الإشعارات!', {
                             body: 'ستصلك إشعارات عند وصول أسئلة جديدة',
-                            icon: '/favicon.jpg'
+                            icon: '/icon-mosque.png'
                           });
+                          toast({ title: '✓ تم التفعيل', description: 'تم تفعيل إشعارات المتصفح بنجاح' });
                         }
                       });
                     }
                   }}
                 >
                   <Bell className="w-4 h-4 ml-2" />
-                  تفعيل
+                  تفعيل الآن
                 </Button>
               </div>
             </div>

@@ -22,12 +22,12 @@ export function useBrowserNotifications() {
         },
         (payload) => {
           const newState = payload.new as { is_box_open: boolean };
-          
+
           // إذا تغيرت حالة الصندوق
           if (previousBoxState.current !== null && previousBoxState.current !== newState.is_box_open) {
             sendNotification(newState.is_box_open);
           }
-          
+
           previousBoxState.current = newState.is_box_open;
         }
       )
@@ -39,7 +39,7 @@ export function useBrowserNotifications() {
         .from('settings')
         .select('is_box_open')
         .single();
-      
+
       if (data) {
         previousBoxState.current = data.is_box_open;
       }
@@ -55,13 +55,13 @@ export function useBrowserNotifications() {
   const sendNotification = (isBoxOpen: boolean) => {
     if ('Notification' in window && Notification.permission === 'granted') {
       const title = isBoxOpen ? '📬 تم فتح صندوق الأسئلة!' : '📪 تم إغلاق صندوق الأسئلة';
-      const body = isBoxOpen 
+      const body = isBoxOpen
         ? 'يمكنك الآن إرسال سؤالك الشرعي'
         : 'سيتم الإعلان عن موعد الفتح القادم';
-      
+
       new Notification(title, {
         body,
-        icon: '/favicon.jpg',
+        icon: '/icon-mosque.png',
         tag: 'box-status',
       });
     }
