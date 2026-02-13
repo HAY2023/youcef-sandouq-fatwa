@@ -36,6 +36,7 @@ dist-ssr
 /src-tauri/gen/android
 /src-tauri/gen/schemas
 /src-tauri/Cargo.lock
+/src-tauri/Cargo.lock
 
 # Local builds
 Youcef-Sandouq-Local*
@@ -43,3 +44,5 @@ Youcef-Sandouq-Local*
 *.dll
 
 Youcef-Sandouq/
+/temp_unzip/
+/src-tauri/target/
