@@ -6,7 +6,7 @@ interface SplashScreenProps {
   duration?: number;
 }
 
-export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps) {
+export function SplashScreen({ onComplete, duration = 1500 }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -176,7 +176,7 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
                 transition={{ delay: 1 }}
                 className="text-primary/60 text-sm mt-2 font-mono"
               >
-                v1.0.17
+                v1.0.18
               </motion.p>
             </motion.div>
           </motion.div>

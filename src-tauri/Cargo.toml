@@ -1,6 +1,6 @@
 [package]
 name = "sandouq-fatwa"
-version = "1.0.17"
+version = "1.0.18"
 description = "صندوق فتوى - مسجد الإيمان"
 authors = ["Youcef HAMOUALI"]
 edition = "2021"
@@ -15,5 +15,13 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-shell = "2"
+tauri-plugin-notification = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+strip = true

@@ -1,14 +1,36 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { isPermissionGranted, requestPermission, sendNotification as sendTauriNotification } from '@tauri-apps/plugin-notification';
+import { useToast } from '@/components/ui/use-toast'; // Assuming this path for useToast
 
-export function useBrowserNotifications() {
+export const useBrowserNotifications = () => {
   const previousBoxState = useRef<boolean | null>(null);
+  const { toast } = useToast();
+  const [soundEnabled, setSoundEnabled] = useState(true); // This state is new, but its usage is not provided in the snippet.
+
+  const initNotifications = async () => {
+    let permission = await isPermissionGranted();
+    if (!permission) {
+      const permissionRes = await requestPermission();
+      permission = permissionRes === 'granted';
+    }
+    return permission;
+  };
+
+  const sendNativeNotification = async (title: string, body: string) => {
+    const hasPermission = await initNotifications();
+    if (hasPermission) {
+      sendTauriNotification({
+        title,
+        body,
+        icon: 'icon-mosque', // Uses app icon automatically or specific bundled asset
+      });
+    }
+  };
 
   useEffect(() => {
-    // طلب إذن الإشعارات
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
+    // Request permission for Tauri notifications on component mount
+    initNotifications();
 
     // الاستماع لتغييرات الإعدادات
     const channel = supabase
@@ -25,7 +47,12 @@ export function useBrowserNotifications() {
 
           // إذا تغيرت حالة الصندوق
           if (previousBoxState.current !== null && previousBoxState.current !== newState.is_box_open) {
-            sendNotification(newState.is_box_open);
+            const title = newState.is_box_open ? '📬 تم فتح صندوق الأسئلة!' : '📪 تم إغلاق صندوق الأسئلة';
+            const body = newState.is_box_open
+              ? 'يمكنك الآن إرسال سؤالك الشرعي'
+              : 'سيتم الإعلان عن موعد الفتح القادم';
+
+            sendNativeNotification(title, body);
           }
 
           previousBoxState.current = newState.is_box_open;
@@ -51,19 +78,4 @@ export function useBrowserNotifications() {
       supabase.removeChannel(channel);
     };
   }, []);
-
-  const sendNotification = (isBoxOpen: boolean) => {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      const title = isBoxOpen ? '📬 تم فتح صندوق الأسئلة!' : '📪 تم إغلاق صندوق الأسئلة';
-      const body = isBoxOpen
-        ? 'يمكنك الآن إرسال سؤالك الشرعي'
-        : 'سيتم الإعلان عن موعد الفتح القادم';
-
-      new Notification(title, {
-        body,
-        icon: '/icon-mosque.png',
-        tag: 'box-status',
-      });
-    }
-  };
-}
+};
