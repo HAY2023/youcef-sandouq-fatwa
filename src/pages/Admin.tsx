@@ -492,26 +492,29 @@ const AdminPage = () => {
     };
   }, [isAuthenticated, soundEnabled]);
 
-  const handleTestNotification = () => {
-    if ('Notification' in window) {
-      if (Notification.permission === 'granted') {
-        new Notification('🔔 إشعار تجريبي', {
-          body: 'هذا إشعار تجريبي من نظام صندوق فتوى للتأكد من الصورة والتنبيهات.',
-          icon: '/icon-mosque.png',
-          tag: 'test-notification',
-        });
-        toast({ title: '✓ تم الإرسال', description: 'تم إرسال إشعار تجريبي للمتصفح' });
-      } else {
-        Notification.requestPermission().then(permission => {
-          if (permission === 'granted') {
-            handleTestNotification();
-          } else {
-            toast({ title: '⚠️ تنبيه', description: 'يرجى تفعيل الإشعارات في المتصفح أولاً', variant: 'destructive' });
-          }
-        });
+  const handleTestNotification = async () => {
+    try {
+      const { isPermissionGranted, requestPermission, sendNotification } = await import('@tauri-apps/plugin-notification');
+
+      let permission = await isPermissionGranted();
+      if (!permission) {
+        const permissionRes = await requestPermission();
+        permission = permissionRes === 'granted';
       }
-    } else {
-      toast({ title: '❌ خطأ', description: 'متصفحك لا يدعم الإشعارات', variant: 'destructive' });
+
+      if (permission) {
+        sendNotification({
+          title: '🔔 إشعار تجريبي',
+          body: 'هذا إشعار تجريبي من نظام صندوق فتوى للتأكد من الصورة والتنبيهات بشكل أصلي.',
+          icon: 'icon-mosque',
+        });
+        toast({ title: '✓ تم الإرسال', description: 'تم إرسال إشعار تجريبي أصلي للنظام' });
+      } else {
+        toast({ title: '⚠️ تنبيه', description: 'يرجى منح صلاحية الإشعارات في النظام', variant: 'destructive' });
+      }
+    } catch (error) {
+      console.error('Error sending test notification:', error);
+      toast({ title: '❌ خطأ', description: 'فشل إرسال الإشعار، تأكد من تحديث البرنامج', variant: 'destructive' });
     }
   };
 

@@ -92,6 +92,19 @@ const deleteQuestionFromDB = async (id: string): Promise<void> => {
   });
 };
 
+// حذف جميع الأسئلة
+const deleteAllQuestionsFromDB = async (): Promise<void> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.clear();
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve();
+  });
+};
+
 export function useOfflineQuestions() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingCount, setPendingCount] = useState(0);
@@ -213,6 +226,20 @@ export function useOfflineQuestions() {
       title: '💾 تم الحفظ',
       description: 'سيُرسل السؤال تلقائياً عند الاتصال بالإنترنت',
     });
+  }, [toast, updatePendingCount]);
+
+  // حذف جميع الأسئلة المحفوظة
+  const clearAllQuestions = useCallback(async () => {
+    try {
+      await deleteAllQuestionsFromDB();
+      await updatePendingCount();
+      toast({
+        title: '🗑️ تم المسح',
+        description: 'تم حذف جميع الأسئلة المحفوظة محلياً',
+      });
+    } catch (error) {
+      console.error('Error clearing all questions:', error);
+    }
   }, [toast, updatePendingCount]);
 
   // مراقبة حالة الاتصال
