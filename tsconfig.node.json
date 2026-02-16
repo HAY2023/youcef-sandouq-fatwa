@@ -19,6 +19,8 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "vite.config.ts"
+    "vite.config.ts",
+    "tailwind.config.ts",
+    "capacitor.config.ts"
   ]
 }
