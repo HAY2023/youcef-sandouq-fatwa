@@ -494,6 +494,7 @@ const AdminPage = () => {
 
   const handleTestNotification = async () => {
     try {
+      // Import Tauri notification plugin dynamically
       const { isPermissionGranted, requestPermission, sendNotification } = await import('@tauri-apps/plugin-notification');
 
       let permission = await isPermissionGranted();
@@ -505,15 +506,28 @@ const AdminPage = () => {
       if (permission) {
         sendNotification({
           title: '🔔 إشعار تجريبي',
-          body: 'هذا إشعار تجريبي من نظام صندوق فتوى للتأكد من الصورة والتنبيهات بشكل أصلي.',
+          body: 'هذا إشعار تجريبي من نظام صندوق فتوى للتأكد من وصول التنبيهات الأصلية.',
           icon: 'icon-mosque',
         });
         toast({ title: '✓ تم الإرسال', description: 'تم إرسال إشعار تجريبي أصلي للنظام' });
       } else {
-        toast({ title: '⚠️ تنبيه', description: 'يرجى منح صلاحية الإشعارات في النظام', variant: 'destructive' });
+        // Fallback to browser notification if native fails or denied
+        if ('Notification' in window) {
+          const browserPerm = await Notification.requestPermission();
+          if (browserPerm === 'granted') {
+            new Notification('🔔 إشعار تجريبي', {
+              body: 'إشعار تجريبي عبر المتصفح (الصلاحية الأصلية مرفوضة)',
+              icon: '/icon-mosque.png'
+            });
+            toast({ title: '✓ تم الإرسال', description: 'تم الإرسال عبر المتصفح' });
+          } else {
+            toast({ title: '⚠️ تنبيه', description: 'يرجى تفعيل الإشعارات في النظام أولاً', variant: 'destructive' });
+          }
+        }
       }
     } catch (error) {
       console.error('Error sending test notification:', error);
+      // Final fallback
       toast({ title: '❌ خطأ', description: 'فشل إرسال الإشعار، تأكد من تحديث البرنامج', variant: 'destructive' });
     }
   };

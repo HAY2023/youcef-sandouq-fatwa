@@ -163,6 +163,20 @@ export function useOfflineQuestions() {
     }
   }, [toast, updatePendingCount]);
 
+  // حذف جميع الأسئلة المحفوظة
+  const clearAllQuestions = useCallback(async () => {
+    try {
+      await deleteAllQuestionsFromDB();
+      await updatePendingCount();
+      toast({
+        title: '🗑️ تم المسح',
+        description: 'تم حذف جميع الأسئلة المحفوظة محلياً',
+      });
+    } catch (error) {
+      console.error('Error clearing all questions:', error);
+    }
+  }, [toast, updatePendingCount]);
+
   // مزامنة الأسئلة المعلقة
   const syncPendingQuestions = useCallback(async () => {
     if (!navigator.onLine || isSyncing) return;
@@ -226,20 +240,6 @@ export function useOfflineQuestions() {
       title: '💾 تم الحفظ',
       description: 'سيُرسل السؤال تلقائياً عند الاتصال بالإنترنت',
     });
-  }, [toast, updatePendingCount]);
-
-  // حذف جميع الأسئلة المحفوظة
-  const clearAllQuestions = useCallback(async () => {
-    try {
-      await deleteAllQuestionsFromDB();
-      await updatePendingCount();
-      toast({
-        title: '🗑️ تم المسح',
-        description: 'تم حذف جميع الأسئلة المحفوظة محلياً',
-      });
-    } catch (error) {
-      console.error('Error clearing all questions:', error);
-    }
   }, [toast, updatePendingCount]);
 
   // مراقبة حالة الاتصال

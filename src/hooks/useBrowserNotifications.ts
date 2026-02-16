@@ -1,38 +1,66 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { isPermissionGranted, requestPermission, sendNotification as sendTauriNotification } from '@tauri-apps/plugin-notification';
-import { useToast } from '@/components/ui/use-toast'; // Assuming this path for useToast
 
+/**
+ * Hook for handling notifications.
+ * Switches between browser notifications and Tauri native notifications based on the environment.
+ */
 export const useBrowserNotifications = () => {
   const previousBoxState = useRef<boolean | null>(null);
-  const { toast } = useToast();
-  const [soundEnabled, setSoundEnabled] = useState(true); // This state is new, but its usage is not provided in the snippet.
+  const [hasNativePermission, setHasNativePermission] = useState<boolean>(false);
 
-  const initNotifications = async () => {
-    let permission = await isPermissionGranted();
-    if (!permission) {
-      const permissionRes = await requestPermission();
-      permission = permissionRes === 'granted';
+  // Initialize native notifications
+  const initNativeNotifications = async () => {
+    try {
+      let permission = await isPermissionGranted();
+      if (!permission) {
+        const permissionRes = await requestPermission();
+        permission = permissionRes === 'granted';
+      }
+      setHasNativePermission(permission);
+      return permission;
+    } catch (error) {
+      console.error('Failed to initialize native notifications:', error);
+      return false;
     }
-    return permission;
   };
 
-  const sendNativeNotification = async (title: string, body: string) => {
-    const hasPermission = await initNotifications();
-    if (hasPermission) {
-      sendTauriNotification({
-        title,
+  const sendNotification = async (isBoxOpen: boolean) => {
+    const title = isBoxOpen ? '📬 تم فتح صندوق الأسئلة!' : '📪 تم إغلاق صندوق الأسئلة';
+    const body = isBoxOpen
+      ? 'يمكنك الآن إرسال سؤالك الشرعي'
+      : 'سيتم الإعلان عن موعد الفتح القادم';
+
+    // Try native notification first (Tauri)
+    try {
+      if (hasNativePermission || await initNativeNotifications()) {
+        sendTauriNotification({
+          title,
+          body,
+          icon: 'icon-mosque', // Uses the bundled icon named icon-mosque
+        });
+        return;
+      }
+    } catch (e) {
+      console.warn('Native notification failed, falling back to browser API:', e);
+    }
+
+    // Fallback to Browser Notification API
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, {
         body,
-        icon: 'icon-mosque', // Uses app icon automatically or specific bundled asset
+        icon: '/icon-mosque.png',
+        tag: 'box-status',
       });
     }
   };
 
   useEffect(() => {
-    // Request permission for Tauri notifications on component mount
-    initNotifications();
+    // Initial permission request
+    initNativeNotifications();
 
-    // الاستماع لتغييرات الإعدادات
+    // Listen to settings changes for box status
     const channel = supabase
       .channel('settings-changes')
       .on(
@@ -45,14 +73,8 @@ export const useBrowserNotifications = () => {
         (payload) => {
           const newState = payload.new as { is_box_open: boolean };
 
-          // إذا تغيرت حالة الصندوق
           if (previousBoxState.current !== null && previousBoxState.current !== newState.is_box_open) {
-            const title = newState.is_box_open ? '📬 تم فتح صندوق الأسئلة!' : '📪 تم إغلاق صندوق الأسئلة';
-            const body = newState.is_box_open
-              ? 'يمكنك الآن إرسال سؤالك الشرعي'
-              : 'سيتم الإعلان عن موعد الفتح القادم';
-
-            sendNativeNotification(title, body);
+            sendNotification(newState.is_box_open);
           }
 
           previousBoxState.current = newState.is_box_open;
@@ -60,7 +82,7 @@ export const useBrowserNotifications = () => {
       )
       .subscribe();
 
-    // جلب الحالة الأولية
+    // Fetch initial state
     const fetchInitialState = async () => {
       const { data } = await supabase
         .from('settings')
@@ -78,4 +100,6 @@ export const useBrowserNotifications = () => {
       supabase.removeChannel(channel);
     };
   }, []);
+
+  return { initNativeNotifications };
 };

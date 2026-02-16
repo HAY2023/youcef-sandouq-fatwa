@@ -267,16 +267,14 @@ export function QuestionForm() {
               )}
             </div>
             {pendingCount > 0 && (
-              <Button
+              <button
                 type="button"
-                variant="ghost"
-                size="sm"
                 onClick={handleViewOfflineQuestions}
-                className="gap-1"
+                className="flex items-center gap-1 hover:underline font-medium"
               >
                 <Eye className="w-4 h-4" />
                 {i18n.language === 'ar' ? 'عرض' : 'View'}
-              </Button>
+              </button>
             )}
           </div>
         )}
