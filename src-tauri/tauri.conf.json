@@ -1,6 +1,6 @@
 {
   "productName": "Sandouq Fatwa",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "identifier": "app.sandouq-fatwa",
   "build": {
     "frontendDist": "../dist",
@@ -30,8 +30,7 @@
     "active": true,
     "targets": [
       "nsis",
-      "dmg",
-      "apk"
+      "dmg"
     ],
     "icon": [
       "icons/32x32.png",
