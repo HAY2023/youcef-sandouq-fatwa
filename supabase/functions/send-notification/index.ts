@@ -86,7 +86,7 @@ serve(async (req) => {
         );
       }
 
-      // Get all registration tokens
+      // Get all admin tokens
       const { data: tokens, error: tokensError } = await supabase
         .from('push_tokens')
         .select('token, device_type');

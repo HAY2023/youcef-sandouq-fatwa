@@ -1,6 +1,6 @@
 {
   "productName": "صندوق الفتوى مسجد الإيمان - 150 مسكن",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "identifier": "app.sandouq-fatwa",
   "build": {
     "frontendDist": "../dist",
