@@ -78,7 +78,7 @@ serve(async (req) => {
       }
 
       const notificationPayload = notification as NotificationPayload;
-      
+
       if (!notificationPayload?.title || !notificationPayload?.body) {
         return new Response(
           JSON.stringify({ error: 'Notification title and body are required' }),
@@ -86,11 +86,10 @@ serve(async (req) => {
         );
       }
 
-      // Get all admin tokens
+      // Get all registration tokens
       const { data: tokens, error: tokensError } = await supabase
         .from('push_tokens')
-        .select('token, device_type')
-        .eq('is_admin', true);
+        .select('token, device_type');
 
       if (tokensError) {
         console.error('Error fetching tokens:', tokensError);
@@ -100,11 +99,11 @@ serve(async (req) => {
         );
       }
 
-      console.log(`Would send notification to ${tokens?.length || 0} admin devices:`, notificationPayload);
+      console.log(`Would send notification to ${tokens?.length || 0} devices:`, notificationPayload);
 
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           message: `Notification queued for ${tokens?.length || 0} devices`,
           tokens_count: tokens?.length || 0
         }),

@@ -7,13 +7,13 @@ const ar = {
   translation: {
     // Navigation
     nav: {
-      title: 'صندوق الفتوى',
-      subtitle: 'مسجد الإيمان',
+      title: 'صندوق الفتوى مسجد الإيمان - 150 مسكن',
+      subtitle: 'مسجد الإيمان – 150 مسكن',
       askQuestion: 'اطرح سؤالك',
     },
     // Hero
     hero: {
-      title: 'صندوق الفتوى',
+      title: 'صندوق الفتوى مسجد الإيمان - 150 مسكن',
       subtitle: 'مسجد الإيمان – 150 مسكن',
       description: 'نجمع استفساراتكم الشرعية ويُجاب عليها في حلقات علمية دورية بإذن الله',
     },
@@ -165,12 +165,12 @@ const ar = {
 const fr = {
   translation: {
     nav: {
-      title: 'Boîte à Fatwas',
+      title: 'Boîte à Fatwas - Masjid Al-Iman',
       subtitle: 'Mosquée Al-Iman',
       askQuestion: 'Posez votre question',
     },
     hero: {
-      title: 'Boîte à Fatwas',
+      title: 'Boîte à Fatwas - Masjid Al-Iman',
       subtitle: 'Mosquée Al-Iman – 150 Logements',
       description: 'Nous recueillons vos questions religieuses pour y répondre lors des sessions périodiques, incha Allah',
     },
@@ -312,12 +312,12 @@ const fr = {
 const en = {
   translation: {
     nav: {
-      title: 'Fatwa Box',
+      title: 'Fatwa Box - Masjid Al-Iman',
       subtitle: 'Al-Iman Mosque',
       askQuestion: 'Ask a Question',
     },
     hero: {
-      title: 'Fatwa Box',
+      title: 'Fatwa Box - Masjid Al-Iman',
       subtitle: 'Al-Iman Mosque – 150 Housing',
       description: 'Submit your religious questions and receive answers during our periodic sessions, God willing',
     },

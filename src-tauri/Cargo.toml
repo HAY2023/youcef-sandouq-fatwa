@@ -1,7 +1,7 @@
 [package]
 name = "sandouq-fatwa"
-version = "1.0.24"
-description = "صندوق فتوى - مسجد الإيمان"
+version = "1.0.25"
+description = "صندوق الفتوى مسجد الإيمان - 150 مسكن"
 authors = ["Youcef HAMOUALI"]
 edition = "2021"
 

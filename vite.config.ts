@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.jpg", "icon-512.png"],
       manifest: {
-        name: "صندوق فتوى - مسجد الإيمان 150 مسكن",
+        name: "صندوق الفتوى مسجد الإيمان - 150 مسكن",
         short_name: "صندوق فتوى",
         description: "نجمع استفساراتكم الشرعية ويتم الإجابة عليها في حلقات دورية بمسجد الإيمان",
         theme_color: "#1a1a2e",
