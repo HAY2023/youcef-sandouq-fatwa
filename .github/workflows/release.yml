@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, macos-latest]
+        platform: [windows-latest, macos-latest, ubuntu-22.04]
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -84,7 +84,9 @@ jobs:
           args: ${{ matrix.platform == 'ubuntu-22.04' && '--target android' || '' }}
 
       - name: Sign Windows installers (if certificate provided)
+```yaml
         if: matrix.platform == 'windows-latest' && secrets.WINDOWS_PFX && secrets.WINDOWS_PFX_PASSWORD
+```
         shell: pwsh
         run: |
           $pfxPass = '${{ secrets.WINDOWS_PFX_PASSWORD }}'
