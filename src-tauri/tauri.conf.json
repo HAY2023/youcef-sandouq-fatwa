@@ -28,6 +28,7 @@
   },
   "bundle": {
     "active": true,
+    "publisher": "Masjid Al-Iman",
     "targets": [
       "nsis",
       "dmg",
@@ -45,19 +46,16 @@
         "language": 1033
       },
       "nsis": {
-        "installerIcon": "icons/icon.png",
         "installMode": "both",
         "displayLanguageSelector": true,
         "languages": [
           "Arabic",
           "English"
-        ],
-        "publisher": "Masjid Al-Iman"
+        ]
       }
     },
     "macOS": {
       "frameworks": []
     }
   }
-}
 }
