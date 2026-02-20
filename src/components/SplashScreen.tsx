@@ -6,7 +6,7 @@ interface SplashScreenProps {
   duration?: number;
 }
 
-export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps) {
+export function SplashScreen({ onComplete, duration = 1500 }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -149,7 +149,7 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="text-4xl font-bold text-primary mb-2"
+                className="text-4xl font-bold text-black mb-2"
               >
                 صندوق الفتوى
               </motion.h1>
@@ -157,7 +157,7 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="text-xl text-primary/80 font-medium"
+                className="text-xl text-black/80 font-medium"
               >
                 مسجد الإيمان – 150 مسكن
               </motion.p>
@@ -165,9 +165,9 @@ export function SplashScreen({ onComplete, duration = 2800 }: SplashScreenProps)
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 }}
-                className="text-primary/60 text-sm mt-2 font-mono"
+                className="text-black/60 text-sm mt-3 font-mono dir-ltr"
               >
-                v1.0.25
+                النسخة 1.1.8
               </motion.p>
             </motion.div>
           </motion.div>

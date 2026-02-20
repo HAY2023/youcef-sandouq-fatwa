@@ -2243,6 +2243,23 @@ const AdminPage = () => {
               )}
             </div>
 
+            {/* زر اختبار الإشعارات */}
+            <div className="bg-card border border-border rounded-lg p-4 flex items-center justify-between">
+              <div>
+                <h4 className="font-medium flex items-center gap-2">
+                  <BellRing className="w-5 h-5 text-primary" />
+                  اختبار استلام الإشعارات
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  اختبر وصول التنبيهات على هذا الجهاز حالاً
+                </p>
+              </div>
+              <Button onClick={handleTestNotification} variant="outline" className="gap-2">
+                <Sparkles className="w-4 h-4" />
+                إرسال تنبيه تجريبي
+              </Button>
+            </div>
+
             {/* إرسال إشعار */}
             <div className="bg-card border border-border rounded-lg p-4 space-y-4">
               <h4 className="font-medium flex items-center gap-2">

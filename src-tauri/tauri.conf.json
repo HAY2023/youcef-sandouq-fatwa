@@ -1,7 +1,7 @@
 {
   "productName": "صندوق الفتوى مسجد الإيمان - 150 مسكن",
-  "version": "1.0.26",
-  "identifier": "app.sandouq-fatwa",
+  "version": "1.1.8",
+  "identifier": "app.sandouq_fatwa",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -30,45 +30,27 @@
     "active": true,
     "targets": [
       "nsis",
-      "msi"
+      "dmg"
     ],
     "icon": [
-      "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
-      "icons/icon.ico",
-      "icons/icon.icns"
+      "icons/32x32.png",
+      "icons/icon.png"
     ],
     "windows": {
-      "certificatePath": null,
-      "certificatePassword": null,
-      "digestAlgorithm": "sha256",
-      "signingEngineVersion": "latest",
-      "nsis": {
-        "artifactTemplate": "${productName}_${version}_${platform}.${ext}",
-        "createDesktopShortcut": true,
-        "createStartMenuShortcut": true,
-        "displayLanguageSelector": true,
-        "installerIcon": "icons/icon.ico",
-        "headerImage": "icons/icon.png",
-        "sidebarImage": "icons/icon.png",
-        "installMode": "both",
-        "languages": ["Arabic", "English"],
-        "license": {
-          "arithmetic": true,
-          "langId": 1025,
-          "path": null
-        }
+      "wix": {
+        "language": "en-US",
+        "publisher": "Masjid Al-Iman"
       },
-      "msi": {
-        "certificatePath": null,
-        "certificatePassword": null,
-        "digestAlgorithm": "sha256",
-        "signingEngineVersion": "latest",
-        "wixLanguage": "ar-SA",
-        "bannerWxiBitmapPath": "icons/icon.ico",
-        "dialogImagePath": "icons/icon-512.png",
-        "license": null
+      "nsis": {
+        "installMode": "both",
+        "displayLanguageSelector": true,
+        "languages": [
+          "Arabic",
+          "English"
+        ],
+        "publisher": "Masjid Al-Iman"
       }
     }
   }

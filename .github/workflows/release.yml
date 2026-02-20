@@ -59,40 +59,27 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
-      - name: Decode PFX certificate (Windows only)
-        if: matrix.platform == 'windows-latest' && secrets.WINDOWS_PFX
-        shell: pwsh
+      - name: Initialize Android project (Ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
         run: |
-          $pfxBytes = [System.Convert]::FromBase64String('${{ secrets.WINDOWS_PFX }}')
-          [IO.File]::WriteAllBytes('certificate.pfx', $pfxBytes)
+          if [ ! -d "src-tauri/gen/android" ]; then
+            echo "Initializing Android project..."
+            # Use npx to avoid issues with npm run tauri -- separator in some shells
+            # Ensure it's non-interactive
+            npx tauri android init
+          else
+            echo "Android project already exists."
+          fi
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: 'صندوق الفتوى v__VERSION__'
-          releaseBody: 'نسخة جديدة من تطبيق صندوق الفتوى مسجد الإيمان - 150 مسكن.'
+          releaseName: 'App v__VERSION__'
+          releaseBody: 'See the assets to download this version and install.'
           releaseDraft: false
           prerelease: false
-          args: ${{ matrix.platform == 'ubuntu-22.04' && '--target android' || '' }}
-
-      - name: Sign Windows installers (if certificate provided)
-```yaml
-        if: matrix.platform == 'windows-latest' && secrets.WINDOWS_PFX && secrets.WINDOWS_PFX_PASSWORD
-```
-        shell: pwsh
-        run: |
-          $pfxPass = '${{ secrets.WINDOWS_PFX_PASSWORD }}'
-          $signtool = 'C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe'
-          if (-Not (Test-Path $signtool)) { $signtool = 'signtool' }
-          $installers = Get-ChildItem -Path src-tauri/target/release/bundle -Recurse -Include *.exe,*.msi,*.msix | ForEach-Object { $_.FullName }
-          foreach ($file in $installers) {
-            & $signtool sign /f certificate.pfx /p $pfxPass /tr http://timestamp.digicert.com /td SHA256 /fd SHA256 "$file"
-          }
+          # Use --debug for Android to avoid signing key requirements for now
+          args: ${{ matrix.platform == 'ubuntu-22.04' && '--target android --debug' || '' }}

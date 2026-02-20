@@ -82,8 +82,8 @@ const Index = () => {
     <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Sticky Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
-          : 'bg-transparent'
+        ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
+        : 'bg-transparent'
         }`}>
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -160,9 +160,6 @@ const Index = () => {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4">
             {t('hero.title')}
           </h1>
-          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-3">
-            {t('hero.subtitle')}
-          </p>
           <p className="text-primary-foreground/80 max-w-xl mx-auto text-sm md:text-base">
             {t('hero.description')}
           </p>

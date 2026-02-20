@@ -33,7 +33,7 @@ dist-ssr
 
 # Tauri
 /src-tauri/target
-/src-tauri/gen/android
+#/src-tauri/gen/android
 /src-tauri/gen/schemas
 /src-tauri/Cargo.lock
 /src-tauri/Cargo.lock
