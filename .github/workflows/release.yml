@@ -62,12 +62,11 @@ jobs:
       - name: Initialize Android project (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
-          echo "Checking for existing Android project..."
           if [ ! -d "src-tauri/gen/android" ]; then
-            echo "Android project not found. Initializing..."
-            # Use npm run tauri to ensure we use the project's installed CLI version
-            # The -- separator ensures arguments are passed to the tauri binary
-            npm run tauri -- android init || { echo "Init failed!"; exit 1; }
+            echo "Initializing Android project..."
+            # Use npx to avoid issues with npm run tauri -- separator in some shells
+            # Ensure it's non-interactive
+            npx tauri android init
           else
             echo "Android project already exists."
           fi

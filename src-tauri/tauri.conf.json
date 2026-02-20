@@ -1,10 +1,7 @@
 {
   "productName": "صندوق الفتوى مسجد الإيمان - 150 مسكن",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "identifier": "app.sandouq-fatwa",
-  "publisher": "Masjid Al-Iman",
-  "author": "Youcef Hamouali",
-  "copyright": "Copyright © 2026 Masjid Al-Iman",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -50,7 +47,8 @@
         "languages": [
           "Arabic",
           "English"
-        ]
+        ],
+        "publisher": "Masjid Al-Iman"
       }
     }
   }
