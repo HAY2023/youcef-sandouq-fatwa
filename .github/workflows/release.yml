@@ -66,8 +66,8 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build the app
-        uses: tauri-apps/tauri-action@v0
+      - name: Build the app (Tauri)
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -76,8 +76,10 @@ jobs:
           releaseBody: |
             صندوق الفتوى مسجد الإيمان
             Sandouq Fatwa App v__VERSION__
-            
+
             📥 Download for your platform
             🚀 Ready for production
           releaseDraft: false
           prerelease: false
+          # ensure the action reads the config from file path (avoid inline JSON parsing)
+          configPath: src-tauri/tauri.conf.json
