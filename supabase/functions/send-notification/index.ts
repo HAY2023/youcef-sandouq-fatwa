@@ -99,13 +99,63 @@ serve(async (req) => {
         );
       }
 
-      console.log(`Would send notification to ${tokens?.length || 0} devices:`, notificationPayload);
+      console.log(`Sending notification to ${tokens?.length || 0} devices:`, notificationPayload);
+
+      // Check for FCM Server Key
+      const fcmServerKey = Deno.env.get('FCM_SERVER_KEY');
+
+      let successCount = 0;
+      let failureCount = 0;
+
+      if (fcmServerKey && tokens && tokens.length > 0) {
+        // Send to FCM (Legacy API for simplicity in Deno without external libs)
+        // Note: For production at scale, consider using a queue or batch sending
+        const results = await Promise.all(tokens.map(async (t) => {
+          try {
+            const res = await fetch('https://fcm.googleapis.com/fcm/send', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `key=${fcmServerKey}`
+              },
+              body: JSON.stringify({
+                to: t.token,
+                notification: {
+                  title: notificationPayload.title,
+                  body: notificationPayload.body,
+                  sound: 'default'
+                },
+                data: notificationPayload.data || {}
+              })
+            });
+
+            if (res.ok) return true;
+            else {
+              const text = await res.text();
+              console.error(`FCM Error for token ${t.token.slice(0, 10)}...:`, text);
+              return false;
+            }
+          } catch (e) {
+            console.error(`Fetch Error for token ${t.token.slice(0, 10)}...:`, e);
+            return false;
+          }
+        }));
+
+        successCount = results.filter(r => r).length;
+        failureCount = results.filter(r => !r).length;
+      } else {
+        console.warn('FCM_SERVER_KEY not set or no tokens found. Skipping actual FCM send.');
+        // If testing without key, we treat it as "queued"
+      }
 
       return new Response(
         JSON.stringify({
           success: true,
-          message: `Notification queued for ${tokens?.length || 0} devices`,
-          tokens_count: tokens?.length || 0
+          message: fcmServerKey
+            ? `Sent to ${successCount} devices, failed ${failureCount}`
+            : `Notification queued (Hypothetically) for ${tokens?.length || 0} devices. Set FCM_SERVER_KEY to really send.`,
+          tokens_count: tokens?.length || 0,
+          sent_count: successCount
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );

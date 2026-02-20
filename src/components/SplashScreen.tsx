@@ -149,7 +149,7 @@ export function SplashScreen({ onComplete, duration = 1500 }: SplashScreenProps)
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="text-4xl font-bold text-primary mb-2"
+                className="text-4xl font-bold text-black mb-2"
               >
                 صندوق الفتوى
               </motion.h1>
@@ -157,7 +157,7 @@ export function SplashScreen({ onComplete, duration = 1500 }: SplashScreenProps)
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="text-xl text-primary/80 font-medium"
+                className="text-xl text-black/80 font-medium"
               >
                 مسجد الإيمان – 150 مسكن
               </motion.p>
@@ -165,9 +165,9 @@ export function SplashScreen({ onComplete, duration = 1500 }: SplashScreenProps)
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 }}
-                className="text-primary/60 text-sm mt-2 font-mono"
+                className="text-black/60 text-sm mt-2 font-mono"
               >
-                v1.1.0
+                v1.1.1
               </motion.p>
             </motion.div>
           </motion.div>
