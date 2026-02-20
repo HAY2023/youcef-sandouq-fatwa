@@ -30,7 +30,9 @@
     "active": true,
     "targets": [
       "nsis",
-      "dmg"
+      "dmg",
+      "deb",
+      "appimage"
     ],
     "icon": [
       "icons/128x128.png",
@@ -39,11 +41,16 @@
       "icons/icon.png"
     ],
     "windows": {
+      "certificatePath": null,
+      "certificatePassword": null,
+      "digestAlgorithm": "sha256",
+      "signingEngineVersion": "latest",
       "wix": {
         "language": "en-US",
         "publisher": "Masjid Al-Iman"
       },
       "nsis": {
+        "installerIcon": "icons/icon.png",
         "installMode": "both",
         "displayLanguageSelector": true,
         "languages": [
@@ -52,6 +59,13 @@
         ],
         "publisher": "Masjid Al-Iman"
       }
+    },
+    "macOS": {
+      "frameworks": [],
+      "exceptionDomain": "",
+      "signingIdentity": null,
+      "providerShortTeamID": null,
+      "entitlements": null
     }
   }
 }
