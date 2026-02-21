@@ -66,20 +66,24 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build the app (Tauri)
-        uses: tauri-apps/tauri-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: ${{ github.ref_name }}
-          releaseName: 'صندوق الفتوى - Sandouq Fatwa v__VERSION__'
-          releaseBody: |
-            صندوق الفتوى مسجد الإيمان
-            Sandouq Fatwa App v__VERSION__
+      - name: Build the app (Tauri Linux/Desktop)
+        run: npm run tauri build
 
-            📥 Download for your platform
-            🚀 Ready for production
-          releaseDraft: false
-          prerelease: false
-          # ensure the action reads the config from file path (avoid inline JSON parsing)
-          configPath: src-tauri/tauri.conf.json
+      - name: Build the app (Tauri Android)
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          npx tauri android init
+          npm run tauri android build -- --debug
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/gen/android/app/build/outputs/apk/universal/debug/*.apk
+            src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
